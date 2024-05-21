@@ -3,7 +3,7 @@ import os
 import time
 import re
 
-prompts_generate = 1500000
+prompts_generate = 256000
 
 # Calculate number of loops required to generate the prompts
 num_loops = int(prompts_generate / 100)
