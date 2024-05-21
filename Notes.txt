@@ -1,0 +1,16 @@
+ChatML:
+<|im_start|>{{role[0]}}
+{{content[0]}}<|im_end|>
+<|im_start|>{{role[1]}}
+{{content[1]}}<|im_end|>
+<|im_start|>{{role[2]}}
+{{content[2]}}<|im_end|>
+Source: https://dreamgen.com/docs/models/opus/v1
+
+Speed Comparison:
+    Ollama GGUF(llama3:8b-instruct-q8_0): 31.54 tokens/s
+    Ollama(mistral:7b-instruct-q8_0): 34.52 tokens/s
+    Ollama(command-r:35b-v0.1-q2_K): 2.09 tokens/s
+    Ollama(nous-hermes2:10.7b-solar-q6_K): 27.55 tokens/s
+    TextGenWebUi EXL2(llama3:8b-instruct-q5_1, 6 bits per weight): 31.02 tokens/s
+
