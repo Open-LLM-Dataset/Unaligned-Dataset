@@ -69,7 +69,11 @@ def process_prompt_file(file_path, output_file_path, start_number=1):
     with open(file_path, 'r') as file:
         prompts = file.readlines()
     
-    for i, prompt in enumerate(prompts, start=start_number):
+    for i, prompt in enumerate(prompts, start=1):
+        # Skip already processed prompts
+        if i < start_number:
+            continue
+
         # Remove the numbered list part (e.g., "1. ", "2. ", etc.)
         prompt_text = re.sub(r'^\d+\.\s*', '', prompt).strip()
         
@@ -104,12 +108,11 @@ highest_json_file, highest_number = find_resume_point(output_dir)
 
 # Determine starting point for processing
 if highest_json_file:
-    # Check if the highest JSON file already has 100 prompts
+    highest_json_num = int(re.findall(r'\d+', highest_json_file)[0])
     if highest_number < 100:
-        start_prompt_file = highest_json_file.replace('replies', '')
+        start_prompt_file = f"prompt-{highest_json_num}.txt"
         start_number = highest_number + 1
     else:
-        highest_json_num = int(re.findall(r'\d+', highest_json_file)[0])
         start_prompt_file = f"prompt-{highest_json_num + 100}.txt"
         start_number = 1
 else:
