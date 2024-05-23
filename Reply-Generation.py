@@ -53,7 +53,7 @@ def find_highest_processed_number(file_path):
 
 # Function to find the highest numbered JSON file and the highest processed prompt number within it
 def find_resume_point(output_dir):
-    json_files = sorted([f for f in os.listdir(output_dir) if f.startswith("prompt-replies-") and f.endswith(".json")])
+    json_files = sorted([f for f in os.listdir(output_dir) if f.startswith("prompt-replies-") and f.endswith(".json")], key=lambda x: int(re.findall(r'\d+', x)[0]))
     if not json_files:
         return None, 0
     
@@ -104,16 +104,20 @@ highest_json_file, highest_number = find_resume_point(output_dir)
 
 # Determine starting point for processing
 if highest_json_file:
-    # Calculate next prompt file to process
-    highest_json_num = int(re.findall(r'\d+', highest_json_file)[0])
-    start_prompt_file = f"prompt-{highest_json_num + 100}.txt"
-    start_number = 1
+    # Check if the highest JSON file already has 100 prompts
+    if highest_number < 100:
+        start_prompt_file = highest_json_file.replace('replies', '')
+        start_number = highest_number + 1
+    else:
+        highest_json_num = int(re.findall(r'\d+', highest_json_file)[0])
+        start_prompt_file = f"prompt-{highest_json_num + 100}.txt"
+        start_number = 1
 else:
     start_prompt_file = "prompt-100.txt"
     start_number = 1
 
 # Process all prompt files in order starting from the correct point
-prompt_files = sorted([f for f in os.listdir(prompts_dir) if f.startswith("prompt-") and f.endswith(".txt")])
+prompt_files = sorted([f for f in os.listdir(prompts_dir) if f.startswith("prompt-") and f.endswith(".txt")], key=lambda x: int(re.findall(r'\d+', x)[0]))
 
 for prompt_file in prompt_files:
     if prompt_file < start_prompt_file:
@@ -123,7 +127,7 @@ for prompt_file in prompt_files:
     output_file_path = os.path.join(output_dir, f"{os.path.splitext(prompt_file)[0].replace('prompt-', 'prompt-replies-')}.json")
     
     if prompt_file == start_prompt_file:
-        start_num = highest_number + 1
+        start_num = start_number
     else:
         start_num = 1
     
