@@ -32,3 +32,6 @@ Text
 
 ## Models Created 
 None yet
+
+## Gitea Mirror
+In case this repository is no longer avaliable through github, a mirror is being hosted using [gitea](https://20250123.xyz/dataset-creator/Unaligned-Dataset)
