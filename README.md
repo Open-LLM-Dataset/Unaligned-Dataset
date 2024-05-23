@@ -1,8 +1,8 @@
 # Unaligned Dataset
-The goal of this project is to create an open-source and constantly evolving dataset of unaligned data for llm finetuning or even training. Community contributions will allow for the quality of the dataset to consistently increase which will be tracked by versioning the dataset after certain milestones. This will also make it easier to keep track of which version of the dataset was used for finetuning once they begin rolling out.
+The goal of this project is to create an open-source and constantly evolving dataset of unaligned data for llm finetuning or even training. Community contributions will allow for the quality of the dataset to consistently increase which will be tracked by versioning the dataset after certain milestones. This will also make it easier to keep track of which version of the dataset was used for finetuning once they begin rolling out. Major versions will indicate changes in methodology of generatign initial data such as using a better model or a altering the prompt-reply generation scripts. Minor versions will be used to add human contributions for improving the inital synthetic data.
 
-## Initial Data
-The initial data(v0.0.0) was created by having llama3-8b-instruct-q8_0 generate sets of 100 unaligned prompts until 256,000 were collected. Then, llama3-8b-instruct-q8_0 was used to generate responses to these unaligned prompts. The prompt reply pairs are saved in json format.
+## Version 0.0.0
+The initial data was created by having llama3-8b-instruct-q8_0 generate sets of 100 unaligned prompts until 256,000 were collected. Then, llama3-8b-instruct-q8_0 was used to generate responses to these unaligned prompts. The prompt reply pairs are saved in json format. This is meant to provide a starting point of how the project will look, this is NOT a good dataset for finetuning. Llama-3-8b is simply not powerful enough to provide decent quality data, even data that's only intended to be used as a starting point. 
 
 ## Contributing 
 Currently all of the data is synthetic which was necessary to achieve such scale with few resources. Looking foward, the goal is for individuals to read through the data and make contributions to improve it. Below is a guide for contributing:  
