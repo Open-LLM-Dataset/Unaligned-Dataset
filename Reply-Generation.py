@@ -18,8 +18,8 @@ options = {
 }
 
 # Directories
-prompts_dir = "prompts"
-output_dir = "prompt-replies"
+prompts_dir = "Prompts"
+output_dir = "Prompt-Replies"
 os.makedirs(output_dir, exist_ok=True)
 
 # Function to append a response to the JSON file
