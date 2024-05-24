@@ -117,6 +117,11 @@ else:
     start_prompt_file = "prompt-100.txt"
     start_number = 1
 
+# Print the resume information
+print(f"Highest JSON file: {highest_json_file}")
+print(f"Highest prompt number in the highest JSON file: {highest_number}")
+print(f"Starting from prompt file: {start_prompt_file} and prompt number: {start_number}")
+
 # Process all prompt files in order starting from the correct point
 prompt_files = sorted([f for f in os.listdir(prompts_dir) if f.startswith("prompt-") and f.endswith(".txt")], key=lambda x: int(re.findall(r'\d+', x)[0]))
 
