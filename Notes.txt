@@ -7,7 +7,7 @@ ChatML:
 {{content[2]}}<|im_end|>
 Source: https://dreamgen.com/docs/models/opus/v1
 
-Speed Comparison:
+Speed Comparison (RTX 3060 + 32GB Ram):
     Ollama GGUF(llama3:8b-instruct-q8_0): 31.54 tokens/s
     Ollama(mistral:7b-instruct-q8_0): 34.52 tokens/s
     Ollama(command-r:35b-v0.1-q2_K): 2.09 tokens/s

@@ -1,0 +1,59 @@
+Some Notes About my Experience with Runpod
+Community Cloud On Demand:
+$0.811 / hr
+3x RTX 3090 (72 GB VRAM)
+17 GB RAM • 4 vCPU
+Total Disk: 220 GB
+100GB Container Disk
+120GB Volume Disk
+
+Notes:
+Pods must be stopped before they can be terminated
+STOPPING THE POD ERASES OLLAMA INSTALL AND EVERYTHING ELSE
+Container Disk needs to be expanded to fit model being ran. Just needs to be 5GB above model size (for safety).
+
+default:~$ nvidia-smi --query-gpu=memory.total --format=csv,noheader | awk '{s+=$1} END {print s"M"}'
+73728M (73.72GB VRAM)
+
+
+Steps:
+1.Run Ollama Curl
+2.ollama pull given model file (desktop will become unresponsive due to high network utilization)
+3.Clone Github
+4.git config --global user.email "rtingsuser1@gmail.com"
+5.git config --global user.name "Open-LLM-Dataset"
+6.Create New Branch git checkout -b llama-3-70b-test
+7.rm -rf Prompt-Replies
+8.mkdir Prompt-Replies
+9.Edit model name using nano (Sudo apt install nano, ctrl+x to save and exit nano)
+10.sudo apt upgrade 
+11.curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+12.python3.10 -m pip install ollama
+13.python3 Reply-Generation.py
+14.Wait for promp/reply generation
+15. git add .
+16. git commit -m "Commit Message"
+17.  git push --set-upstream origin llama-3-70b-test
+18. authenticate with personal access token 
+
+Wizardlm2:8x22b-q4_0 
+total duration:       1m49.595793495s
+load duration:        3.053329ms
+prompt eval count:    50 token(s)
+prompt eval duration: 1.593784s
+prompt eval rate:     31.37 tokens/s
+eval count:           954 token(s)
+eval duration:        1m47.8676s
+eval rate:            8.84 tokens/s
+
+Llama3:70b-q6_k uses 57054MB of Vram
+
+Llama3:70b-instruct-q6_K 
+total duration:       49.174434872s
+load duration:        1.943174ms
+prompt eval count:    18 token(s)
+prompt eval duration: 384.636ms
+prompt eval rate:     46.80 tokens/s
+eval count:           629 token(s)
+eval duration:        48.647108s
+eval rate:            12.93 tokens/s
