@@ -13,21 +13,30 @@ Contributions are divided into several categories:
 3. New Data
 
 <details>
-<summary>Promt/Reply Improvement</summary>
+<summary>Prompt/Reply Improvement</summary>
 <br>
-Text
+
+The most difficult to define, but arguably most important part of improving the datasets. Manually reading through the generated prompt-reply pairs and improving them can include:
+- Correcting factual errors
+- Eliminating moralizing statements
+
 </details>
+
 <br>
 <details>
 <summary>Deduplication</summary>
 <br>
+
 A strong dataset means having a large variety of unique prompts. If you find two or more prompt/reply pairs which are very similar, make a pull request inicating the locations of the duplicates and remove all but the one percieved to be the highest quality. 
+
 </details>
 <br>
 <details>
 <summary>New Data</summary>
 <br>
-Text
+
+Add more data to the dataset by either generating more prompt-reply pairs using the provided python scripts (requires locally running ollama and respective model) or by hand writing new prompt-reply pairs, making sure to follow the appropriate format.
+
 </details>
 
 ## Models Created 
