@@ -39,6 +39,11 @@ Add more data to the dataset by either generating more prompt-reply pairs using 
 
 </details>
 
+## Future Plans
+- [ ] Complete v0 synthetic reply generation
+- [ ] Analyze v0 data to identify improvements in pipeline (python scripts)
+- [ ] Test models by producing 1000 sample responses to the same prompts to decide which should be used to create v1.0.0 synthetic base dataset
+
 ## Models Created 
 None yet
 
