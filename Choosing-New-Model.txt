@@ -1,0 +1,20 @@
+Compute Needed:
+    Llama-3-70b: 4x3090 for q8_0
+    Command-R-Plus: 5x3090 for q8_0
+    WizardLM-2-8x22: 7x3090 for q8_0
+
+Speed (using the respective number of gpus):
+
+Cost:
+    Llama-3-70b: $1.068/hr
+
+    Command-R-Plus: $1.333/hr
+
+    WizardLM-2-8x22: $1.858/hr
+
+Time to generate 1000 prompt-reply pairs:
+    Llama-3-70b:
+
+    Command-R-Plus: 
+
+    WizardLM-2-8x22: 

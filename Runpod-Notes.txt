@@ -18,23 +18,25 @@ default:~$ nvidia-smi --query-gpu=memory.total --format=csv,noheader | awk '{s+=
 
 Steps:
 1.Run Ollama Curl
-2.ollama pull given model file (desktop will become unresponsive due to high network utilization)
-3.Clone Github
-4.git config --global user.email "rtingsuser1@gmail.com"
-5.git config --global user.name "Open-LLM-Dataset"
-6.Create New Branch git checkout -b llama-3-70b-test
-7.rm -rf Prompt-Replies
-8.mkdir Prompt-Replies
-9.Edit model name using nano (Sudo apt install nano, ctrl+x to save and exit nano)
-10.sudo apt upgrade 
-11.curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
-12.python3.10 -m pip install ollama
-13.python3 Reply-Generation.py
-14.Wait for promp/reply generation
-15. git add .
-16. git commit -m "Commit Message"
-17.  git push --set-upstream origin llama-3-70b-test
-18. authenticate with personal access token 
+curl -fsSL https://ollama.com/install.sh | sh
+2.Run Ollama serve and open a new window
+3.ollama pull given model file (desktop will become unresponsive due to high network utilization)
+4.Clone Github
+5.git config --global user.email "rtingsuser1@gmail.com"
+6.git config --global user.name "Open-LLM-Dataset"
+7.Create New Branch git checkout -b llama-3-70b-test
+8.rm -rf Prompt-Replies
+9.mkdir Prompt-Replies
+10.Edit model name using nano (Sudo apt install nano, ctrl+x to save and exit nano)
+11.sudo apt upgrade 
+12.curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+13.python3.10 -m pip install ollama
+14.python3 Reply-Generation.py
+15.Wait for promp/reply generation
+16. git add .
+17. git commit -m "Commit Message"
+18.  git push --set-upstream origin llama-3-70b-test
+19. authenticate with personal access token 
 
 Wizardlm2:8x22b-q4_0 
 total duration:       1m49.595793495s
