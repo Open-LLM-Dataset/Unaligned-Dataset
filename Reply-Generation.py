@@ -4,7 +4,7 @@ import re
 import json
 
 # Parameters for the model
-model_name = "llama3:8b-instruct-q8_0"
+model_name = "llama3:70b-instruct-q6_K"
 
 options = {
     "num_ctx": 2048,
