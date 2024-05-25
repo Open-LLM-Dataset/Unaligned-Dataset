@@ -41,12 +41,12 @@ def append_response_to_file(file_path, number, prompt_text, reply):
             json.dump([data], file, indent=2)
 
 # Function to process each prompt and generate a response
-def process_prompt_file(file_path, output_file_path, file, number):
+def process_prompt_file(file_path, output_file_path, start_number):
     # Read the prompts from the file
     with open(file_path, 'r') as file:
-        prompts = file.readlines()[number - 1:]  # Adjusted to start from the specified number
+        prompts = file.readlines()[start_number - 1:]  # Adjusted to start from the specified number
     
-    for i, prompt in enumerate(prompts, start=number):
+    for i, prompt in enumerate(prompts, start=start_number):
         # Remove the numbered list part (e.g., "1. ", "2. ", etc.)
         prompt_text = re.sub(r'^\d+\.\s*', '', prompt).strip()
         
@@ -77,8 +77,8 @@ def process_prompt_file(file_path, output_file_path, file, number):
 # Load file and number values from the resume.json
 with open('resume.json', 'r') as resume_file:
     resume_data = json.load(resume_file)
-    file = resume_data.get('file', 700)
-    number = resume_data.get('number', 23)
+    file = resume_data.get('file', 100)
+    number = resume_data.get('number', 1)
 
 # Process all prompt files in order
 prompt_files = sorted([f for f in os.listdir(prompts_dir) if f.startswith("prompt-") and f.endswith(".txt")], key=lambda x: int(x.split('-')[1].split('.')[0]))
@@ -89,6 +89,9 @@ for prompt_file in prompt_files:
         continue
     file_path = os.path.join(prompts_dir, prompt_file)
     output_file_path = os.path.join(output_dir, f"{os.path.splitext(prompt_file)[0].replace('prompt-', 'prompt-replies-')}.json")
-    process_prompt_file(file_path, output_file_path, file, number)
+    process_prompt_file(file_path, output_file_path, number)
+
+    # Reset number to 1 for subsequent files
+    number = 1
 
     print(f"Completed processing for {prompt_file}")
