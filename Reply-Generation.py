@@ -1,7 +1,7 @@
-import ollama
 import os
 import re
 import json
+import ollama
 
 # Parameters for the model
 model_name = "llama3:8b-instruct-q8_0"
@@ -23,8 +23,9 @@ output_dir = "Prompt-Replies"
 os.makedirs(output_dir, exist_ok=True)
 
 # Function to append a response to the JSON file
-def append_response_to_file(file_path, prompt_text, reply):
+def append_response_to_file(file_path, number, prompt_text, reply):
     data = {
+        'number': number,
         'prompt': prompt_text,
         'response': reply
     }
@@ -40,12 +41,12 @@ def append_response_to_file(file_path, prompt_text, reply):
             json.dump([data], file, indent=2)
 
 # Function to process each prompt and generate a response
-def process_prompt_file(file_path, output_file_path, start_index=0):
+def process_prompt_file(file_path, output_file_path, file, number):
     # Read the prompts from the file
     with open(file_path, 'r') as file:
-        prompts = file.readlines()[start_index:]
-
-    for i, prompt in enumerate(prompts, start=start_index+1):
+        prompts = file.readlines()[number - 1:]  # Adjusted to start from the specified number
+    
+    for i, prompt in enumerate(prompts, start=number):
         # Remove the numbered list part (e.g., "1. ", "2. ", etc.)
         prompt_text = re.sub(r'^\d+\.\s*', '', prompt).strip()
         
@@ -71,30 +72,25 @@ def process_prompt_file(file_path, output_file_path, start_index=0):
         reply = response['message']['content']
 
         # Append the response to the JSON file
-        append_response_to_file(output_file_path, prompt_text, reply)
+        append_response_to_file(output_file_path, i, prompt_text, reply)
 
         print(f"Processed and appended response for prompt: {prompt_text}")
 
-        # Update the progress index
-        with open("progress.json", "w") as progress_file:
-            json.dump({"file_path": file_path, "index": i}, progress_file)
+# Load file and number values from the resume.json
+with open('resume.json', 'r') as resume_file:
+    resume_data = json.load(resume_file)
+    file = resume_data.get('file', 700)
+    number = resume_data.get('number', 23)
 
-# Check if there is a progress file to resume from
-if os.path.exists("progress.json"):
-    with open("progress.json", "r") as progress_file:
-        progress_data = json.load(progress_file)
-        prompt_file = progress_data["file_path"]
-        start_index = progress_data["index"]
-        print(f"Resuming processing from file: {prompt_file}, index: {start_index}")
-        process_prompt_file(prompt_file, os.path.join(output_dir, f"{os.path.splitext(os.path.basename(prompt_file))[0].replace('prompt-', 'prompt-replies-')}.json"), start_index=start_index)
-        print("Processing resumed successfully.")
-else:
-    # Process all prompt files in order
-    prompt_files = sorted([f for f in os.listdir(prompts_dir) if f.startswith("prompt-") and f.endswith(".txt")])
+# Process all prompt files in order
+prompt_files = sorted([f for f in os.listdir(prompts_dir) if f.startswith("prompt-") and f.endswith(".txt")], key=lambda x: int(x.split('-')[1].split('.')[0]))
 
-    for prompt_file in prompt_files:
-        file_path = os.path.join(prompts_dir, prompt_file)
-        output_file_path = os.path.join(output_dir, f"{os.path.splitext(prompt_file)[0].replace('prompt-', 'prompt-replies-')}.json")
-        process_prompt_file(file_path, output_file_path)
+for prompt_file in prompt_files:
+    file_number = int(prompt_file.split('-')[1].split('.')[0])
+    if file_number < file:
+        continue
+    file_path = os.path.join(prompts_dir, prompt_file)
+    output_file_path = os.path.join(output_dir, f"{os.path.splitext(prompt_file)[0].replace('prompt-', 'prompt-replies-')}.json")
+    process_prompt_file(file_path, output_file_path, file, number)
 
-        print(f"Completed processing for {prompt_file}")
+    print(f"Completed processing for {prompt_file}")
