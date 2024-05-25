@@ -74,8 +74,6 @@ def process_prompt_file(file_path, output_file_path, file, number):
         # Append the response to the JSON file
         append_response_to_file(output_file_path, i, prompt_text, reply)
 
-        print(f"Processed and appended response for prompt: {prompt_text}")
-
 # Load file and number values from the resume.json
 with open('resume.json', 'r') as resume_file:
     resume_data = json.load(resume_file)
