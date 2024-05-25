@@ -43,6 +43,7 @@ Add more data to the dataset by either generating more prompt-reply pairs using 
 - [ ] Complete v0 synthetic reply generation
 - [ ] Analyze v0 data to identify improvements in pipeline (python scripts)
 - [ ] Test models(Command-R-Plus, WizardLM-2-8x22B, Llama-3-70b) by producing 1000 sample responses to the same prompts to decide which should be used to create v1.0.0 synthetic base dataset
+- [ ] Create a better way to edit replies than manually editing the json, markdown is not rendered properly in json, it's difficults to read long responses, and its easy to break the json if a quote/bracket/comma is accidentally deleted
 
 ## Models Created 
 None yet
