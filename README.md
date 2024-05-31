@@ -44,6 +44,8 @@ Add more data to the dataset by either generating more prompt-reply pairs using 
 - [ ] Analyze v0 data to identify improvements in pipeline (python scripts)
 - [ ] Test models(Command-R-Plus, WizardLM-2-8x22B, Llama-3-70b) by producing 1000 sample responses to the same prompts to decide which should be used to create v1.0.0 synthetic base dataset
 - [ ] Create a better way to edit replies than manually editing the json, markdown is not rendered properly in json, it's difficults to read long responses, and its easy to break the json if a quote/bracket/comma is accidentally deleted
+- [ ] Make dataset multi-turn instead of just single question response
+- [ ] Use Llama Gaurd 2 to classify every prompt reply pir (S1: Violent Crimes, S2: Non-Violent Crimes, S3: Sex Crimes, S4: Child Exploitation, S5: Specialized Advice, S6: Privacy, S7: Intellectual Property, S8: Indiscriminate Weapons, S9: Hate, S10: Self-Harm, S11: Sexual Content.)
 
 ## Models Created 
 None yet

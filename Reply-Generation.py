@@ -1,10 +1,10 @@
-import ollama
 import os
 import re
 import json
+import ollama
 
 # Parameters for the model
-model_name = "llama3:70b-instruct-q6_K"
+model_name = "llama3:8b-instruct-q6_K"
 
 options = {
     "num_ctx": 2048,
@@ -18,8 +18,8 @@ options = {
 }
 
 # Directories
-prompts_dir = "Prompts"
-output_dir = "Prompt-Replies"
+prompts_dir = "Neutral-Prompts"
+output_dir = "Neutral-Prompt-Replies"
 os.makedirs(output_dir, exist_ok=True)
 
 # Function to append a response to the JSON file
@@ -40,40 +40,13 @@ def append_response_to_file(file_path, number, prompt_text, reply):
         with open(file_path, 'w') as file:
             json.dump([data], file, indent=2)
 
-# Function to find the highest processed number in a given JSON file
-def find_highest_processed_number(file_path):
-    if not os.path.exists(file_path):
-        return 0
-    
-    with open(file_path, 'r') as file:
-        file_data = json.load(file)
-        if not file_data:
-            return 0
-        return max(item['number'] for item in file_data)
-
-# Function to find the highest numbered JSON file and the highest processed prompt number within it
-def find_resume_point(output_dir):
-    json_files = sorted([f for f in os.listdir(output_dir) if f.startswith("prompt-replies-") and f.endswith(".json")], key=lambda x: int(re.findall(r'\d+', x)[0]))
-    if not json_files:
-        return None, 0
-    
-    highest_json_file = json_files[-1]
-    highest_json_path = os.path.join(output_dir, highest_json_file)
-    highest_number = find_highest_processed_number(highest_json_path)
-    
-    return highest_json_file, highest_number
-
 # Function to process each prompt and generate a response
-def process_prompt_file(file_path, output_file_path, start_number=1):
+def process_prompt_file(file_path, output_file_path, start_number):
     # Read the prompts from the file
     with open(file_path, 'r') as file:
-        prompts = file.readlines()
+        prompts = file.readlines()[start_number - 1:]  # Adjusted to start from the specified number
     
-    for i, prompt in enumerate(prompts, start=1):
-        # Skip already processed prompts
-        if i < start_number:
-            continue
-
+    for i, prompt in enumerate(prompts, start=start_number):
         # Remove the numbered list part (e.g., "1. ", "2. ", etc.)
         prompt_text = re.sub(r'^\d+\.\s*', '', prompt).strip()
         
@@ -101,35 +74,24 @@ def process_prompt_file(file_path, output_file_path, start_number=1):
         # Append the response to the JSON file
         append_response_to_file(output_file_path, i, prompt_text, reply)
 
-# Find the highest numbered JSON file and the highest processed prompt number within it
-highest_json_file, highest_number = find_resume_point(output_dir)
+# Load file and number values from the resume.json
+with open('resume.json', 'r') as resume_file:
+    resume_data = json.load(resume_file)
+    file = resume_data.get('file', 100)
+    number = resume_data.get('number', 1)
 
-# Determine starting point for processing
-if highest_json_file:
-    highest_json_num = int(re.findall(r'\d+', highest_json_file)[0])
-    if highest_number < 100:
-        start_prompt_file = f"prompt-{highest_json_num}.txt"
-        start_number = highest_number + 1
-    else:
-        start_prompt_file = f"prompt-{highest_json_num + 100}.txt"
-        start_number = 1
-else:
-    start_prompt_file = "prompt-100.txt"
-    start_number = 1
-
-# Process all prompt files in order starting from the correct point
-prompt_files = sorted([f for f in os.listdir(prompts_dir) if f.startswith("prompt-") and f.endswith(".txt")], key=lambda x: int(re.findall(r'\d+', x)[0]))
+# Process all prompt files in order
+prompt_files = sorted([f for f in os.listdir(prompts_dir) if f.startswith("prompt-") and f.endswith(".txt")], key=lambda x: int(x.split('-')[1].split('.')[0]))
 
 for prompt_file in prompt_files:
-    if prompt_file < start_prompt_file:
+    file_number = int(prompt_file.split('-')[1].split('.')[0])
+    if file_number < file:
         continue
-    
     file_path = os.path.join(prompts_dir, prompt_file)
     output_file_path = os.path.join(output_dir, f"{os.path.splitext(prompt_file)[0].replace('prompt-', 'prompt-replies-')}.json")
-    
-    if prompt_file == start_prompt_file:
-        start_num = start_number
-    else:
-        start_num = 1
-    
-    process_prompt_file(file_path, output_file_path, start_num)
+    process_prompt_file(file_path, output_file_path, number)
+
+    # Reset number to 1 for subsequent files
+    number = 1
+
+    print(f"Completed processing for {prompt_file}")
