@@ -1,33 +1,37 @@
 import sys
 import os
 import json
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QTextBrowser
+from PyQt5.QtGui import QFont
+from PyQt5.QtCore import Qt
 
 class JsonSelector(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-        
+       
     def initUI(self):
         self.setWindowTitle('JSON File Selector')
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(100, 100, 400, 300)
+        self.layout = QVBoxLayout(self)
+        self.setStyleSheet("background-color: #333; color: #fff;")
 
-        self.layout = QVBoxLayout()
-
-        self.folder_button = QPushButton('Select Folder', self)
+        self.folder_button = QPushButton('Select Folder')
+        self.folder_button.setStyleSheet("background-color: #555; color: #fff;")
         self.folder_button.clicked.connect(self.selectFolder)
         self.layout.addWidget(self.folder_button)
 
-        self.json_dropdown = QComboBox(self)
+        self.json_dropdown = QComboBox()
+        self.json_dropdown.setStyleSheet("background-color: #555; color: #fff;")
         self.layout.addWidget(self.json_dropdown)
 
-        self.number_dropdown = QComboBox(self)
+        self.number_dropdown = QComboBox()
+        self.number_dropdown.setStyleSheet("background-color: #555; color: #fff;")
         self.layout.addWidget(self.number_dropdown)
 
-        self.prompt_reply_label = QLabel(self)
-        self.layout.addWidget(self.prompt_reply_label)
-
-        self.setLayout(self.layout)
+        self.text_browser = QTextBrowser()
+        self.text_browser.setStyleSheet("background-color: #555; color: #fff;")
+        self.layout.addWidget(self.text_browser)
 
     def selectFolder(self):
         folder_path = QFileDialog.getExistingDirectory(self, "Select Folder")
@@ -47,7 +51,7 @@ class JsonSelector(QWidget):
             with open(selected_json_path, 'r') as file:
                 data = json.load(file)
                 self.number_dropdown.clear()
-                self.prompt_reply_label.clear()
+                self.text_browser.clear()
                 prompt_reply_dict = {}
                 for item in data:
                     number = item.get('number')
@@ -61,7 +65,8 @@ class JsonSelector(QWidget):
     def displayPromptReply(self, prompt_reply_dict):
         selected_number = int(self.number_dropdown.currentText())
         prompt, response = prompt_reply_dict.get(selected_number, ("", ""))
-        self.prompt_reply_label.setText(f"Prompt: {prompt}\n\nResponse: {response}")
+        markdown_text = f"<h3>Prompt:</h3><p>{prompt}</p><h3>Response:</h3><p>{response}</p>"
+        self.text_browser.setHtml(markdown_text)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
